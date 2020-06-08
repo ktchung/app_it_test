@@ -2,25 +2,23 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+import GameBoard from './GameBoard.js';
+import HighScore from './HighScore.js';
+
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="logo">
+        Logo
+      </div>
+      <GameBoard onFinish={handleFinished} />
+      <HighScore />
     </div>
   );
 }
+
+const handleFinished = (name, score) => {
+  console.log(name, "scored", score);
+};
 
 export default App;
