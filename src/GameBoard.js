@@ -22,7 +22,7 @@ class GameBoard extends React.Component {
     // console.log(this.state.cardList);
     var cards = this.state.cardList.map((value, index) => {
       return ([
-          <div className="col">
+          <div className="col" key={index}>
             <Card
               key={index}
               value={value}
@@ -31,7 +31,7 @@ class GameBoard extends React.Component {
               solved={this.state.solvedList.indexOf(index) !== -1}
             />
           </div>,
-          (index + 1) % 4 === 0 ? <div className="w-100" /> : undefined
+          (index + 1) % 4 === 0 ? <div className="w-100" key={index+0.5}/> : undefined
         ]);
       }
     )
@@ -39,8 +39,8 @@ class GameBoard extends React.Component {
     return (
       <div>
         <div className="score">Score: {this.state.score}</div>
-        <div class="container">
-          <div class="row">
+        <div className="container">
+          <div className="row">
             {cards}
           </div>
         </div>
@@ -49,6 +49,7 @@ class GameBoard extends React.Component {
           onHide={this.state.onFinish}
           onHide2={() => {this.setState({modalShow: false,})}}
           score={this.state.score}
+          appRef={this.props.appRef}
           className="finishedModal"
         />
       </div>
@@ -56,9 +57,9 @@ class GameBoard extends React.Component {
   }
 
   handleCardClick(key) {
-    console.log("Clicked", key);
+    // console.log("Clicked", key);
     if (this.state.solvedList.indexOf(key) !== -1) {
-      console.log("Solved");
+      // console.log("Solved");
       return;
     }
     if (this.state.firstCard === undefined) {
@@ -74,15 +75,15 @@ class GameBoard extends React.Component {
   }
 
   checkPair() {
-    console.log("Pair:", this.state.firstCard, this.state.secondCard);
+    // console.log("Pair:", this.state.firstCard, this.state.secondCard);
     if (this.state.cardList[this.state.firstCard] === this.state.cardList[this.state.secondCard]) {
-      console.log("Correct!");
+      // console.log("Correct!");
       this.setState((prev) => ({
         solvedList: [...prev.solvedList, prev.firstCard, prev.secondCard],
         score: prev.score + 5,
       }));
     } else {
-      console.log("Incorrect!");
+      // console.log("Incorrect!");
       this.setState((prev) => ({
         score: prev.score - 1,
       }));
@@ -93,7 +94,7 @@ class GameBoard extends React.Component {
     });
 
     if (this.state.solvedList.length === this.state.cardList.length) {
-      console.log("Finished");
+      // console.log("Finished");
       this.setState({
         modalShow: true,
       });
@@ -136,7 +137,7 @@ const FinishedModal = (props) => {
           onClick={() => {
             if (validateName(nameInput.current.value)) {
               setIsInvalid(false);
-              props.onHide(nameInput.current.value, props.score);
+              props.onHide(nameInput.current.value, props.score, props.appRef);
               props.onHide2();
             } else {
               setIsInvalid(true);
