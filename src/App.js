@@ -4,6 +4,7 @@ import './App.css';
 
 import GameBoard from './GameBoard.js';
 import HighScore from './HighScore.js';
+import RankToast from './RankToast.js';
 
 import initSqlJs from 'sql.js';
 import * as store from 'store';
@@ -15,6 +16,8 @@ class App extends React.Component {
       data: undefined,
       db: null,
       dbErr: null,
+      showToast: false,
+      rank: -1,
     };
   }
 
@@ -48,7 +51,7 @@ class App extends React.Component {
   }
 
   readScoreTable() {
-    var results = this.exec("SELECT * FROM scores ORDER BY score DESC");
+    var results = this.exec("SELECT RANK() OVER (ORDER BY score DESC) rank, name, score FROM scores");
     // console.log(results);
     this.setState({
       data: results[0],
@@ -74,6 +77,7 @@ class App extends React.Component {
         </div>
         <GameBoard onFinish={this.handleFinished} appRef={this}/>
         <HighScore data={this.state.data} />
+        <RankToast show={this.state.showToast} rank={this.state.rank} />
       </div>
     );
   }
@@ -84,6 +88,21 @@ class App extends React.Component {
     var bArray = appRef.state.db.export();
     store.set('db', {'data': bArray});
     appRef.readScoreTable();
+    try {
+      var results = appRef.state.db.exec("SELECT rank FROM (SELECT RANK() OVER (ORDER BY score DESC) rank, name, score FROM scores) WHERE name=:name AND score=:score", {":name": name, ":score": score});
+      // console.log(results[0].values[0][0]);
+      appRef.setState({
+        showToast: true,
+        rank: results[0].values[0][0]
+      });
+      setTimeout(() => {
+        appRef.setState({
+          showToast: false
+        });
+      }, 3000);
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
 

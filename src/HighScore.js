@@ -62,9 +62,9 @@ const HighScoreModal = (props) => {
               props.data === undefined ? <tr><td /><td>No Data</td><td /></tr> :
               props.data.map((entry, id) =>
                 <tr key={id}>
-                  <td>{id + 1}</td>
                   <td>{entry[0]}</td>
                   <td>{entry[1]}</td>
+                  <td>{entry[2]}</td>
                 </tr>
               )
             }
