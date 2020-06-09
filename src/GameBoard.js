@@ -22,7 +22,7 @@ class GameBoard extends React.Component {
     // console.log(this.state.cardList);
     var cards = this.state.cardList.map((value, index) => {
       return ([
-          <div className="col" key={index}>
+          <div className="col" align="center" key={index}>
             <Card
               key={index}
               value={value}

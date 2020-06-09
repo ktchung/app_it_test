@@ -69,7 +69,7 @@ class App extends React.Component {
   render () {
     return (
       <div className="App">
-        <div className="logo">
+        <div className="logo" onClick={() => {window.location.reload(false)}}>
           <img src={logo} alt="logo"/>
         </div>
         <GameBoard onFinish={this.handleFinished} appRef={this}/>
